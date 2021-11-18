@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace tiktakto
 {
   class Program
   {
-    
-    
     static char[,] jatekter = new char[3,3];
     static void Main(string[] args)
     {
@@ -22,13 +19,44 @@ namespace tiktakto
       while (lepesekSzama<9)
       {
         Console.WriteLine($"{jatekos}. játékos lép.");
-        do
+        if (jatekos==1)
         {
-          LepesBeker(out sor, out oszlop);
-        } while (!Elhelyez(sor, oszlop, jatekos));
-        LepesEredmenye(ref lepesekSzama, ref jatekos);
+          do
+          {
+            LepesBeker(out sor, out oszlop);
+
+          } while (!Elhelyez(sor, oszlop, jatekos));
+          //Ellenorzes(jatekos);
+
+          LepesEredmenye(ref lepesekSzama, ref jatekos);
+          Console.WriteLine();
+        }
+        
+        if (jatekos==2)
+        {
+          Mesterseges200IqsIntelligencia();
+          //Ellenorzes(jatekos);
+          LepesEredmenye(ref lepesekSzama, ref jatekos);
+          Kirajzol();
+          Console.WriteLine();
+        }
+        
       }
       Console.ReadKey();
+    }
+
+    private static void Mesterseges200IqsIntelligencia()
+    {
+      Random rnd = new Random();
+      int sor;
+      int oszlop;
+      do
+      {
+        sor = rnd.Next(0, 3);
+        oszlop = rnd.Next(0, 3);
+      } while (!(jatekter[sor,oszlop] == '.'));
+
+      jatekter[sor, oszlop] = 'O';
     }
 
     private static void LepesEredmenye(ref int lepesekSzama, ref int jatekos)
@@ -38,12 +66,10 @@ namespace tiktakto
         Console.WriteLine($"{jatekos}. játékos nyert!");
         lepesekSzama = 10;
       }
-
       JatekosCsere(ref jatekos);
       lepesekSzama++;
-      Kirajzol();
+      
     }
-
     private static bool Ellenorzes(int jatekos)
     {
       // mit számoljunk (x vagy o)
@@ -56,9 +82,7 @@ namespace tiktakto
       if (nyert) return true;
       nyert = AtlokVizsgalata(mit);
       return nyert;
-      
     }
-
     private static bool AtlokVizsgalata(char mit)
     {
       if (jatekter[0,0]== mit && jatekter[0,0] == jatekter[1,1] && jatekter[1,1] == jatekter[2,2])
@@ -71,7 +95,6 @@ namespace tiktakto
       }
       return false;
     }
-
     private static bool Oszlopokvizsgálata(char mit)
     {
       for (int i = 0; i < 3; i++)
@@ -91,7 +114,6 @@ namespace tiktakto
       }
       return false;
     }
-
     private static bool SorokVizsgalata(char mit)
     {
       for (int i = 0; i < 3; i++)
@@ -111,10 +133,8 @@ namespace tiktakto
       }
       return false;
     }
-
     private static bool Elhelyez(int sor, int oszlop, int jatekosszama)
     {
-      
       if (jatekter[sor,oszlop]=='.')
       {
         if (jatekosszama == 1)
@@ -131,9 +151,7 @@ namespace tiktakto
       {
         return false;
       }
-      
     }
-
     private static void Inicializal()
     {
       for (int i = 0; i < 3; i++)
