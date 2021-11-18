@@ -15,7 +15,6 @@ namespace tiktakto
     {
       Inicializal();
       Kirajzol();
-      
       int lepesekSzama = 0;
       int jatekos = 1;
       int sor = 0;
@@ -25,13 +24,92 @@ namespace tiktakto
         Console.WriteLine($"{jatekos}. játékos lép.");
         do
         {
-          LepesBeker(out sor,out oszlop);
-        } while (!Elhelyez(sor,oszlop,jatekos));
-        JatekosCsere(ref jatekos);
-        lepesekSzama++;
-        Kirajzol();
+          LepesBeker(out sor, out oszlop);
+        } while (!Elhelyez(sor, oszlop, jatekos));
+        LepesEredmenye(ref lepesekSzama, ref jatekos);
       }
       Console.ReadKey();
+    }
+
+    private static void LepesEredmenye(ref int lepesekSzama, ref int jatekos)
+    {
+      if (Ellenorzes(jatekos))
+      {
+        Console.WriteLine($"{jatekos}. játékos nyert!");
+        lepesekSzama = 10;
+      }
+
+      JatekosCsere(ref jatekos);
+      lepesekSzama++;
+      Kirajzol();
+    }
+
+    private static bool Ellenorzes(int jatekos)
+    {
+      // mit számoljunk (x vagy o)
+      // Sorok, Oszlopok átlók
+      // meg áll találatkor
+      char mit = jatekos == 1 ? 'X' : 'O';
+      bool nyert = SorokVizsgalata(mit);
+      if (nyert) return true;
+      nyert = Oszlopokvizsgálata(mit);
+      if (nyert) return true;
+      nyert = AtlokVizsgalata(mit);
+      return nyert;
+      
+    }
+
+    private static bool AtlokVizsgalata(char mit)
+    {
+      if (jatekter[0,0]== mit && jatekter[0,0] == jatekter[1,1] && jatekter[1,1] == jatekter[2,2])
+      {
+        return true;
+      }
+      else if (jatekter[0, 2] == mit && jatekter[0, 2] == jatekter[1, 1] && jatekter[1, 1] == jatekter[2, 0])
+      {
+        return true;
+      }
+      return false;
+    }
+
+    private static bool Oszlopokvizsgálata(char mit)
+    {
+      for (int i = 0; i < 3; i++)
+      {
+        int darab = 0;
+        for (int j = 0; j < 3; j++)
+        {
+          if (jatekter[j, i] == mit)
+          {
+            darab++;
+          }
+        }
+        if (darab > 2)
+        {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    private static bool SorokVizsgalata(char mit)
+    {
+      for (int i = 0; i < 3; i++)
+      {
+        int darab = 0;
+        for (int j = 0; j < 3; j++)
+        {
+          if (jatekter[i, j] == mit)
+          {
+            darab++;
+          }
+        }
+        if (darab > 2)
+        {
+          return true;
+        }
+      }
+      return false;
     }
 
     private static bool Elhelyez(int sor, int oszlop, int jatekosszama)
