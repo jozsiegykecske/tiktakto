@@ -11,11 +11,15 @@ namespace tiktakto
     static void Main(string[] args)
     {
       Inicializal();
-      Kirajzol();
       int lepesekSzama = 0;
       int jatekos = 1;
       int sor = 0;
       int oszlop = 0;
+      Console.Write("Ember kezd vagy gép?(e/g):");
+      if (Console.ReadLine()=="g")
+      {
+        jatekos = 2;
+      }
       while (lepesekSzama<9)
       {
         Console.WriteLine($"{jatekos}. játékos lép.");
@@ -31,7 +35,6 @@ namespace tiktakto
           LepesEredmenye(ref lepesekSzama, ref jatekos);
           Console.WriteLine();
         }
-        
         if (jatekos==2)
         {
           Mesterseges200IqsIntelligencia();
@@ -40,11 +43,9 @@ namespace tiktakto
           Kirajzol();
           Console.WriteLine();
         }
-        
       }
       Console.ReadKey();
     }
-
     private static void Mesterseges200IqsIntelligencia()
     {
       Random rnd = new Random();
@@ -55,10 +56,8 @@ namespace tiktakto
         sor = rnd.Next(0, 3);
         oszlop = rnd.Next(0, 3);
       } while (!(jatekter[sor,oszlop] == '.'));
-
       jatekter[sor, oszlop] = 'O';
     }
-
     private static void LepesEredmenye(ref int lepesekSzama, ref int jatekos)
     {
       if (Ellenorzes(jatekos))
@@ -68,7 +67,6 @@ namespace tiktakto
       }
       JatekosCsere(ref jatekos);
       lepesekSzama++;
-      
     }
     private static bool Ellenorzes(int jatekos)
     {
@@ -169,9 +167,9 @@ namespace tiktakto
     private static void LepesBeker(out int sor, out int oszlop)
     {
       Console.Write("Melyik sor?:");
-      sor = Convert.ToInt32(Console.ReadLine());
+      sor = Convert.ToInt32(Console.ReadLine())-1;
       Console.Write("Melyik oszlop?:");
-      oszlop = Convert.ToInt32(Console.ReadLine());
+      oszlop = Convert.ToInt32(Console.ReadLine())-1;
     }
     static void Kirajzol()
     {
@@ -179,10 +177,27 @@ namespace tiktakto
       {
         for (int j = 0; j < 3; j++)
         {
-          Console.Write(jatekter[i,j] + " ");
+          SzinesbenKiir(jatekter[i,j]);
         }
         Console.WriteLine();
       }
+    }
+
+    private static void SzinesbenKiir(char ch)
+    {
+      ConsoleColor eredeti = Console.ForegroundColor;
+
+      switch (ch)
+      {
+        case 'X': Console.ForegroundColor = ConsoleColor.Green;
+          break;
+        case 'O': Console.ForegroundColor = ConsoleColor.Red;
+          break;
+        default: Console.ForegroundColor = ConsoleColor.Yellow;
+          break;
+      }
+      Console.Write($"{ch} ");
+      Console.ForegroundColor = eredeti;
     }
   }
 }
